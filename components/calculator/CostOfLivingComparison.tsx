@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import {
@@ -37,8 +37,13 @@ export function CostOfLivingComparison({
   currentSalary = 75000,
   currentState = 'TX',
 }: CostOfLivingComparisonProps) {
+  const [mounted, setMounted] = useState(false);
   const [fromState, setFromState] = useState(currentState);
   const [toState, setToState] = useState('CA');
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const states = useMemo(() => {
     return Object.entries(costOfLivingByState)
@@ -102,18 +107,22 @@ export function CostOfLivingComparison({
         <div className="grid grid-cols-[1fr,auto,1fr] gap-4 items-end">
           <div className="space-y-2">
             <Label>From State</Label>
-            <Select value={fromState} onValueChange={setFromState}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {states.map((state) => (
-                  <SelectItem key={state.code} value={state.code}>
-                    {state.name} ({state.index.toFixed(1)})
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            {mounted ? (
+              <Select value={fromState} onValueChange={setFromState}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {states.map((state) => (
+                    <SelectItem key={state.code} value={state.code}>
+                      {state.name} ({state.index.toFixed(1)})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            ) : (
+              <div className="h-9 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm animate-pulse" />
+            )}
           </div>
 
           <div className="pb-2">
@@ -122,18 +131,22 @@ export function CostOfLivingComparison({
 
           <div className="space-y-2">
             <Label>To State</Label>
-            <Select value={toState} onValueChange={setToState}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {states.map((state) => (
-                  <SelectItem key={state.code} value={state.code}>
-                    {state.name} ({state.index.toFixed(1)})
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            {mounted ? (
+              <Select value={toState} onValueChange={setToState}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {states.map((state) => (
+                    <SelectItem key={state.code} value={state.code}>
+                      {state.name} ({state.index.toFixed(1)})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            ) : (
+              <div className="h-9 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm animate-pulse" />
+            )}
           </div>
         </div>
 

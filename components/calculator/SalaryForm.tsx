@@ -42,6 +42,7 @@ interface SalaryFormProps {
 }
 
 export function SalaryForm({ onCalculate, initialValues }: SalaryFormProps) {
+  const [mounted, setMounted] = useState(false);
   const [salary, setSalary] = useState(initialValues?.grossSalary?.toString() || '75000');
   const [salaryPeriod, setSalaryPeriod] = useState<SalaryPeriod>(
     initialValues?.salaryPeriod || 'annual'
@@ -63,6 +64,11 @@ export function SalaryForm({ onCalculate, initialValues }: SalaryFormProps) {
       other: 0,
     }
   );
+
+  // Prevent hydration mismatch with Radix UI Select
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Debounced calculation
   const triggerCalculation = useCallback(() => {
@@ -158,60 +164,72 @@ export function SalaryForm({ onCalculate, initialValues }: SalaryFormProps) {
         {/* State Selection */}
         <div className="space-y-2">
           <Label htmlFor="state">State</Label>
-          <Select value={state} onValueChange={setState}>
-            <SelectTrigger id="state">
-              <SelectValue placeholder="Select state" />
-            </SelectTrigger>
-            <SelectContent>
-              {US_STATES.map((s) => (
-                <SelectItem key={s.code} value={s.code}>
-                  {s.name}
-                  {!s.hasIncomeTax && (
-                    <span className="ml-2 text-xs text-muted-foreground">
-                      (No state tax)
-                    </span>
-                  )}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          {mounted ? (
+            <Select value={state} onValueChange={setState}>
+              <SelectTrigger id="state" className="w-full">
+                <SelectValue placeholder="Select state" />
+              </SelectTrigger>
+              <SelectContent>
+                {US_STATES.map((s) => (
+                  <SelectItem key={s.code} value={s.code}>
+                    {s.name}
+                    {!s.hasIncomeTax && (
+                      <span className="ml-2 text-xs text-muted-foreground">
+                        (No state tax)
+                      </span>
+                    )}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          ) : (
+            <div className="h-9 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm animate-pulse" />
+          )}
         </div>
 
         {/* Filing Status */}
         <div className="space-y-2">
           <Label htmlFor="filingStatus">Filing Status</Label>
-          <Select
-            value={filingStatus}
-            onValueChange={(v) => setFilingStatus(v as FilingStatus)}
-          >
-            <SelectTrigger id="filingStatus">
-              <SelectValue placeholder="Select filing status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="single">Single</SelectItem>
-              <SelectItem value="married">Married Filing Jointly</SelectItem>
-              <SelectItem value="head_of_household">Head of Household</SelectItem>
-            </SelectContent>
-          </Select>
+          {mounted ? (
+            <Select
+              value={filingStatus}
+              onValueChange={(v) => setFilingStatus(v as FilingStatus)}
+            >
+              <SelectTrigger id="filingStatus" className="w-full">
+                <SelectValue placeholder="Select filing status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="single">Single</SelectItem>
+                <SelectItem value="married">Married Filing Jointly</SelectItem>
+                <SelectItem value="head_of_household">Head of Household</SelectItem>
+              </SelectContent>
+            </Select>
+          ) : (
+            <div className="h-9 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm animate-pulse" />
+          )}
         </div>
 
         {/* Pay Frequency */}
         <div className="space-y-2">
           <Label htmlFor="payFrequency">Pay Frequency</Label>
-          <Select
-            value={payFrequency}
-            onValueChange={(v) => setPayFrequency(v as PayFrequency)}
-          >
-            <SelectTrigger id="payFrequency">
-              <SelectValue placeholder="Select pay frequency" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="weekly">Weekly (52 paychecks)</SelectItem>
-              <SelectItem value="biweekly">Bi-Weekly (26 paychecks)</SelectItem>
-              <SelectItem value="semimonthly">Semi-Monthly (24 paychecks)</SelectItem>
-              <SelectItem value="monthly">Monthly (12 paychecks)</SelectItem>
-            </SelectContent>
-          </Select>
+          {mounted ? (
+            <Select
+              value={payFrequency}
+              onValueChange={(v) => setPayFrequency(v as PayFrequency)}
+            >
+              <SelectTrigger id="payFrequency" className="w-full">
+                <SelectValue placeholder="Select pay frequency" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="weekly">Weekly (52 paychecks)</SelectItem>
+                <SelectItem value="biweekly">Bi-Weekly (26 paychecks)</SelectItem>
+                <SelectItem value="semimonthly">Semi-Monthly (24 paychecks)</SelectItem>
+                <SelectItem value="monthly">Monthly (12 paychecks)</SelectItem>
+              </SelectContent>
+            </Select>
+          ) : (
+            <div className="h-9 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm animate-pulse" />
+          )}
         </div>
 
         {/* Advanced Mode Toggle */}

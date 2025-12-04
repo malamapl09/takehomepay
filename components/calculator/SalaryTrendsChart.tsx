@@ -177,36 +177,44 @@ export function SalaryTrendsChart({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="space-y-2">
             <Label>State</Label>
-            <Select value={state} onValueChange={setState}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {states.map((s) => (
-                  <SelectItem key={s.code} value={s.code}>
-                    {s.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            {isMounted ? (
+              <Select value={state} onValueChange={setState}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {states.map((s) => (
+                    <SelectItem key={s.code} value={s.code}>
+                      {s.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            ) : (
+              <div className="h-9 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm animate-pulse" />
+            )}
           </div>
 
           <div className="space-y-2">
             <Label>Filing Status</Label>
-            <Select
-              value={filingStatus}
-              onValueChange={(v) => setFilingStatus(v as FilingStatus)}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="single">Single</SelectItem>
-                <SelectItem value="married_jointly">Married Filing Jointly</SelectItem>
-                <SelectItem value="married_separately">Married Filing Separately</SelectItem>
-                <SelectItem value="head_of_household">Head of Household</SelectItem>
-              </SelectContent>
-            </Select>
+            {isMounted ? (
+              <Select
+                value={filingStatus}
+                onValueChange={(v) => setFilingStatus(v as FilingStatus)}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="single">Single</SelectItem>
+                  <SelectItem value="married_jointly">Married Filing Jointly</SelectItem>
+                  <SelectItem value="married_separately">Married Filing Separately</SelectItem>
+                  <SelectItem value="head_of_household">Head of Household</SelectItem>
+                </SelectContent>
+              </Select>
+            ) : (
+              <div className="h-9 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm animate-pulse" />
+            )}
           </div>
 
           <div className="space-y-2">
