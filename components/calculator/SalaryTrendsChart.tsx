@@ -207,8 +207,7 @@ export function SalaryTrendsChart({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="single">Single</SelectItem>
-                  <SelectItem value="married_jointly">Married Filing Jointly</SelectItem>
-                  <SelectItem value="married_separately">Married Filing Separately</SelectItem>
+                  <SelectItem value="married">Married Filing Jointly</SelectItem>
                   <SelectItem value="head_of_household">Head of Household</SelectItem>
                 </SelectContent>
               </Select>
